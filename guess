@@ -1,0 +1,104 @@
+import UIKit
+
+class ViewController: UIViewController {
+
+    @IBOutlet weak var answer: UILabel!
+    @IBOutlet weak var count: UILabel!
+    @IBOutlet weak var score: UILabel!
+    @IBOutlet weak var jindu: UIProgressView!
+    var s = 0;
+    var c = 0;
+    let questions = ["马云是中国首富","1+1=2","天气预报可以预报未来十五天的天气","小猪有四条腿","小猫爱吃鱼","你高中要替李华写作文","运用产业链地图可以帮我们认清环境形势","鸟在地上走","鱼在天上飞","小狗爱吃骨头","我爱妈妈","今天会下雪","内蒙有大草原","山西有煤矿","我爱敲代码"]
+    let answerku = [0,1,1,1,1,1,0,0,0,1,1,0,1,1,0]
+    var questionindex = 0
+    @IBAction func yes(_ sender: UIButton) {
+        next()
+        check(userinput:1)
+        count1()
+        progress1()
+    }
+    @IBAction func no(_ sender: UIButton) {
+        next()
+        check(userinput:0)
+        count1()
+        progress1()
+    }
+    func point()
+    {
+        if c == 15
+        {
+            let alert1 = UIAlertController(title: "Tips",message:"your score is \(s),do you want to do it again?",preferredStyle: .alert)
+            let ok1 = UIAlertAction(title:"OK",style:.default,handler: nil)
+            alert1.addAction(ok1)
+            self.present(alert1,animated:true,completion:nil)
+        }
+    }
+    func check(userinput:Int)
+    {
+        var rightanswer = answerku[questionindex]
+        if rightanswer == userinput
+        {
+            s = s + 1;
+            score.text = ("总得分:\(s)")
+            if c<15
+            {
+                let alert = UIAlertController(title: "Tips",message:"you are right!",preferredStyle: .alert)
+                let ok = UIAlertAction(title:"OK",style:.default,handler: nil)
+                alert.addAction(ok)
+                self.present(alert,animated:true,completion:nil)
+            }
+            point()
+        }
+        else
+        {
+            if c<15
+            {
+                let alert = UIAlertController(title: "Tips",message:"you are wrong!",preferredStyle: .alert)
+                let ok = UIAlertAction(title:"OK",style:.default,handler: nil)
+                alert.addAction(ok)
+                self.present(alert,animated:true,completion:nil)
+            }
+            point()
+        }
+    }
+    func count1()
+    {
+        if c < 16
+        {
+            count.text = ("\(c)/15")
+        }
+        if c==16
+        {
+            answer.text = questions[0]
+            jindu.progress = 0
+            c = 1
+            count.text = "\(c)/15"
+            s = 0
+            score.text = "总得分:\(s)"
+        }
+    }
+    func progress1()
+    {
+        c = c + 1;
+        jindu.progress += 1/15
+        jindu.tag = 1;
+    }
+    func next()
+    {
+        questionindex = questionindex + 1
+        if questionindex == 15
+        {
+            questionindex = 0
+        }
+        answer.text = questions[questionindex]
+    }
+    override func viewDidLoad() {
+        answer.text = questions[0]
+        jindu.progress = 0
+        c = 1
+        count.text = "\(c)/15"
+        score.text = "总得分:\(s)"
+        super.viewDidLoad()
+        // Do any additional setup after loading the view.
+    }
+}
